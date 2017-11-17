@@ -8,6 +8,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <script src="https://smtpjs.com/smtp.js"></script>
+        <link rel="stylesheet" href="/static/service/css/index.css" type="text/css">
 
     <style>
         html, body {
@@ -17,7 +18,7 @@
         }
 
         body {
-        	font-family: 'RixSGo L';
+        	font-family: 'Open Sans', sans-serif;
         }
 
         #box {
@@ -103,14 +104,32 @@
     </head>
   <body>
 
-    <nav>
+    <!-- <nav>
         <div class="nav-wrapper">
-            <a href="/" class="brand-logo" style="margin-left: 20px;">Youtube Player</a>
+            <div class="">
+                <a href="/" class="brand-logo" style="margin-left: 40px; margin-top: 8px;"><img src="/static/service/images/logo.png" width="180px" height="35px"></a>
+            </div>
+
+            <form class="search-form">
+                <input class="z-depth-5" type="text">
+                <button type="submit" name="button"><i class="large material-icons">search</i></button>
+            </form>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
                 <li><a href="" data-activates="slide-out" id="button-collapse" onclick="focusToSearchBox()"><i class="material-icons">menu</i></a></li>
             </ul>
         </div>
-    </nav>
+    </nav> -->
+
+    <div class="nav z-depth-1">
+        <div class="logo-field">
+            <a href="/" class="brand-logo"><img src="/static/service/images/logo.png" width="180px" height="35px"></a>
+        </div>
+
+        <form id="search-form" class="search-form z-depth-1">
+            <input id="search-bar" class="z-depth-5" type="text">
+            <button type="submit" name="button"><i class="large material-icons">search</i></button>
+        </form>
+    </div>
     <br>
 
     <div class="row">
@@ -119,8 +138,8 @@
             <div class="center">
                 <div class="container">
 
-                    <a class="waves-effect waves-light blue btn" onclick="prevVideo()"><i class="material-icons">skip_previous</i></a>
-                    <a class="waves-effect waves-light blue btn" onclick="nextVideo()"><i class="material-icons">skip_next</i></a>
+                    <a class="waves-effect waves-light black btn" onclick="prevVideo()"><i class="material-icons">skip_previous</i></a>
+                    <a class="waves-effect waves-light black btn" onclick="nextVideo()"><i class="material-icons">skip_next</i></a>
 
                     <br>
                     <br>
@@ -193,6 +212,7 @@
 
         $(document).ready(() => {
             initYoutubeAPI();
+            onSubmitSearchBar();
             $('#button-collapse').sideNav({
                     menuWidth: 800, // Default is 240
                 }
@@ -202,8 +222,90 @@
                 search($('#query').val());
             });
             $('.modal').modal();
+            $(window).resize(() => {
+                searchResultBoxSetSize();
+            });
             onClickFeedbackSubmit($('#feedback-submit'));
         });
+
+        function onSubmitSearchBar() {
+            $('#search-form').on('submit', (e) => {
+                console.log('test');
+                e.preventDefault();
+                appendSearchResultBox();
+                getVideoIdsByQuery($('#search-bar').val(), getVideoDataByIds);
+            });
+        }
+
+        function foo(data) {
+            console.log(data);
+        }
+
+        function appendSearchResultBox() {
+            $('body').append(`
+                <div class="search-result-box z-depth-1">
+                    <div class="video card-panel">
+                        <div class="thumbnail">
+
+                        </div>
+                        <div class="info-field">
+                            <div class="title">
+                                <span>정은지&서인국 - 우리 사랑 이대로 (응답하라 1997 Official OST Love Story Part 2)</span>
+                            </div>
+                            <div class="sub-info">
+                                원더케이(1THEK) ㆍ 1 : 23 : 5
+                            </div>
+                        </div>
+                        <div class="button-field">
+                            <i class="basket material-icons" id="basket">add</i>
+                            <i class="play material-icons" id="play">play_arrow</i>
+                        </div>
+                    </div>
+
+                    <div class="video card-panel">
+                        <div class="thumbnail">
+
+                        </div>
+                        <div class="info-field">
+                            <div class="title">
+                                <span>정은지&서인국 - 우리 사랑 이대로</span>
+                            </div>
+                            <div class="sub-info">
+                                원더케이(1THEK) ㆍ 1 : 23 : 5
+                            </div>
+                        </div>
+                        <div class="button-field">
+                            <i class="basket material-icons" id="basket">add</i>
+                            <i class="play material-icons" id="play">play_arrow</i>
+                        </div>
+                    </div>
+
+
+                    <div class="video card-panel">
+
+                    </div>
+                </div>
+
+            `);
+            searchResultBoxSetSize();
+        }
+
+        function searchResultBoxSetSize() {
+            let searchBarPosition = $('#search-bar').position();
+            let resultBoxLeft = searchBarPosition.left;
+            let resultBoxTop = searchBarPosition.top + 45;
+            let searchBarWidth = $('#search-bar').width() + 20;
+
+            let style = {
+                'position': 'absolute',
+                'left': resultBoxLeft,
+                'top': resultBoxTop,
+                'width': searchBarWidth,
+                'height': '500px',
+                'background-color': 'white'
+            }
+            $('.search-result-box').css(style);
+        }
 
         function search(query) {
             cnt = 0;
@@ -326,10 +428,11 @@
                 async: false,
                 success: (videos) => {
                     for(var i in videos.items) {
-                        if(option == 1) appendVideoToSearchBox(videos.items[i]);
-                        else if(option == 2) appendVideoToList(videos.items[i], i);
-                        else console.log('error');
-                        saveVideoId(videos.items[i].id);
+                        foo(videos.items[i]);
+                        // if(option == 1) appendVideoToSearchBox(videos.items[i]);
+                        // else if(option == 2) appendVideoToList(videos.items[i], i);
+                        // else console.log('error');
+                        // saveVideoId(videos.items[i].id);
                     }
                     finishLoading();
                 }
@@ -475,11 +578,11 @@
         }
 
         function changeColor(now) {
-            $(`#list${now}`).css('color', '#1976d2');
+            $(`#list${now}`).css('color', 'black');
         }
 
         function restoreColor(now) {
-            $(`#list${now}`).css('color', 'black');
+            $(`#list${now}`).css('color', 'aeaeae');
         }
 
         function setCookie(cName, cValue, cDay){

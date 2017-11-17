@@ -1,0 +1,109 @@
+nav {
+  background-color: white; }
+
+body {
+  background-color: whitesmoke; }
+  body .nav {
+    background-color: white;
+    width: 100%;
+    height: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center; }
+    body .nav .logo-field {
+      height: 100%;
+      margin-left: 50px;
+      display: flex;
+      justify-content: center;
+      align-items: center; }
+    body .nav form {
+      height: 65%;
+      width: 700px;
+      margin-right: 150px;
+      display: flex;
+      justify-content: center;
+      align-items: center; }
+      body .nav form button {
+        height: 100%;
+        width: 100px;
+        border: 0;
+        border-radius: 2px;
+        background-color: #fc0d1b;
+        display: flex;
+        justify-content: center;
+        align-items: center; }
+        body .nav form button i {
+          color: white;
+          font-size: 1.5rem; }
+      body .nav form input {
+        margin: 0 !important;
+        padding-left: 20px !important;
+        font-size: 20px !important; }
+      body .nav form input[type=text]:not(.browser-default),
+      body .nav form input:not([type]):focus:not([readonly]),
+      body .nav form input[type=text]:not(.browser-default):focus:not([readonly]),
+      body .nav form input[type=password]:not(.browser-default):focus:not([readonly]),
+      body .nav form input[type=email]:not(.browser-default):focus:not([readonly]),
+      body .nav form input[type=url]:not(.browser-default):focus:not([readonly]),
+      body .nav form input[type=time]:not(.browser-default):focus:not([readonly]),
+      body .nav form input[type=date]:not(.browser-default):focus:not([readonly]),
+      body .nav form input[type=datetime]:not(.browser-default):focus:not([readonly]),
+      body .nav form input[type=datetime-local]:not(.browser-default):focus:not([readonly]),
+      body .nav form input[type=tel]:not(.browser-default):focus:not([readonly]),
+      body .nav form input[type=number]:not(.browser-default):focus:not([readonly]),
+      body .nav form input[type=search]:not(.browser-default):focus:not([readonly]),
+      body .nav form textarea.materialize-textarea:focus:not([readonly]) {
+        border-bottom: none;
+        -webkit-box-shadow: none;
+        box-shadow: none; }
+  body .search-result-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center; }
+    body .search-result-box .video {
+      width: 600px;
+      height: 90px;
+      background-color: pink;
+      margin-bottom: 0 !important;
+      padding: 0 !important;
+      display: flex;
+      justify-content: center;
+      align-items: center; }
+      body .search-result-box .video .thumbnail {
+        width: 120px;
+        height: 100%;
+        background-color: blue; }
+      body .search-result-box .video .info-field {
+        width: calc(100% - 120px - 100px);
+        height: 100%;
+        background-color: white;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center; }
+        body .search-result-box .video .info-field .title {
+          width: 100%;
+          height: 50%;
+          padding-left: 5px;
+          overflow: hidden;
+          background-color: yellow;
+          display: flex;
+          align-items: center; }
+          body .search-result-box .video .info-field .title span {
+            font-weight: 600; }
+        body .search-result-box .video .info-field .sub-info {
+          width: 100%;
+          height: 50%;
+          padding-left: 5px;
+          background-color: brown;
+          display: flex;
+          align-items: center; }
+      body .search-result-box .video .button-field {
+        width: 100px;
+        height: 100%;
+        background-color: green;
+        display: flex;
+        justify-content: space-around;
+        align-items: center; }
+
+/*# sourceMappingURL=index.css.map */
