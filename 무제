@@ -1,19 +1,19 @@
 <div class="search-result-box z-depth-1">
     <div class="video card-panel">
         <div class="thumbnail">
-
+            <img src="${video.snippet.thumbnails.default.url}" />
         </div>
         <div class="info-field">
-            <div class="title">
-                <span>정은지&서인국 - 우리 사랑 이대로 (응답하라 1997 Official OST Love Story Part 2)</span>
+            <div class="title title${cnt}">
+                <span>${video.snippet.title}</span>
             </div>
             <div class="sub-info">
-                원더케이(1THEK) ㆍ 1 : 23 : 5
+                ${video.snippet.channelTitle}ㆍ${h}:${m}:${s}
             </div>
         </div>
         <div class="button-field">
-            <i class="basket material-icons" id="basket">add</i>
-            <i class="play material-icons" id="play">play_arrow</i>
+            <i id="basket${cnt}" class="basket material-icons" id="basket">add</i>
+            <i id="play${cnt}" class="play material-icons" id="play">play_arrow</i>
         </div>
     </div>
 
@@ -26,17 +26,12 @@
                 <span>정은지&서인국 - 우리 사랑 이대로</span>
             </div>
             <div class="sub-info">
-                원더케이(1THEK) ㆍ 1 : 23 : 5
+                원더케이(1THEK)ㆍ1:23:5
             </div>
         </div>
         <div class="button-field">
             <i class="basket material-icons" id="basket">add</i>
             <i class="play material-icons" id="play">play_arrow</i>
         </div>
-    </div>
-
-
-    <div class="video card-panel">
-
     </div>
 </div>

@@ -40,11 +40,6 @@
             overflow: hidden;
         }
 
-        #play-now {
-            display: flex;
-            justify-content: flex-end;
-        }
-
         #box-list, #list, #song-title, #take-music {
             display: flex;
         }
@@ -99,6 +94,137 @@
         textarea.materialize-textarea:focus:not([readonly])+label {
             color: #2196F3;
         }
+
+        .song-title-text {
+            color: #aeaeae;
+        }
+
+        nav {
+          background-color: white; }
+
+        body {
+          background-color: whitesmoke; }
+          body .nav {
+            background-color: white;
+            width: 100%;
+            height: 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center; }
+            body .nav .logo-field {
+              height: 100%;
+              margin-left: 50px;
+              display: flex;
+              justify-content: center;
+              align-items: center; }
+            body .nav form {
+              height: 65%;
+              width: 700px;
+              margin-right: 150px;
+              display: flex;
+              justify-content: center;
+              align-items: center; }
+              body .nav form button {
+                height: 100%;
+                width: 100px;
+                border: 0;
+                border-radius: 2px;
+                background-color: #fc0d1b;
+                display: flex;
+                justify-content: center;
+                align-items: center; }
+                body .nav form button i {
+                  color: white;
+                  font-size: 1.5rem; }
+              body .nav form input {
+                margin: 0 !important;
+                padding-left: 20px !important;
+                font-size: 20px !important; }
+              body .nav form input[type=text]:not(.browser-default),
+              body .nav form input:not([type]):focus:not([readonly]),
+              body .nav form input[type=text]:not(.browser-default):focus:not([readonly]),
+              body .nav form input[type=password]:not(.browser-default):focus:not([readonly]),
+              body .nav form input[type=email]:not(.browser-default):focus:not([readonly]),
+              body .nav form input[type=url]:not(.browser-default):focus:not([readonly]),
+              body .nav form input[type=time]:not(.browser-default):focus:not([readonly]),
+              body .nav form input[type=date]:not(.browser-default):focus:not([readonly]),
+              body .nav form input[type=datetime]:not(.browser-default):focus:not([readonly]),
+              body .nav form input[type=datetime-local]:not(.browser-default):focus:not([readonly]),
+              body .nav form input[type=tel]:not(.browser-default):focus:not([readonly]),
+              body .nav form input[type=number]:not(.browser-default):focus:not([readonly]),
+              body .nav form input[type=search]:not(.browser-default):focus:not([readonly]),
+              body .nav form textarea.materialize-textarea:focus:not([readonly]) {
+                border-bottom: none;
+                -webkit-box-shadow: none;
+                box-shadow: none; }
+          body .search-result-box {
+            overflow-y: scroll; }
+            body .search-result-box .video {
+              width: 600px;
+              height: 90px;
+              margin-bottom: 0 !important;
+              margin-left: 5px !important;
+              padding: 0 !important;
+              border-radius: 2px;
+              display: flex;
+              justify-content: center;
+              align-items: center; }
+              body .search-result-box .video .thumbnail {
+                width: 120px;
+                height: 100%; }
+                body .search-result-box .video .thumbnail img {
+                  border-radius: 2px; }
+              body .search-result-box .video .info-field {
+                width: calc(100% - 120px - 100px);
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center; }
+                body .search-result-box .video .info-field .title {
+                  width: 100%;
+                  height: 50%;
+                  padding-left: 5px;
+                  overflow: hidden;
+                  display: flex;
+                  align-items: center; }
+                  body .search-result-box .video .info-field .title span {
+                    font-weight: 600; }
+                body .search-result-box .video .info-field .sub-info {
+                  width: 100%;
+                  height: 50%;
+                  padding-left: 5px;
+                  display: flex;
+                  align-items: center; }
+              body .search-result-box .video .button-field {
+                width: 100px;
+                height: 100%;
+                display: flex;
+                justify-content: space-around;
+                align-items: center; }
+                body .search-result-box .video .button-field i {
+                  cursor: pointer; }
+
+        .controll-buttons {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-top: 10px;
+          margin-bottom: 5px; }
+          .controll-buttons i {
+            cursor: pointer; }
+
+        #preloader {
+          margin-top: 200px; }
+
+        #shuffle {
+          color: #aeaeae; }
+
+        #repeat {
+          color: #aeaeae; }
+
+        /*# sourceMappingURL=index.css.map */
+
     </style>
 
     </head>
@@ -126,7 +252,7 @@
         </div>
 
         <form id="search-form" class="search-form z-depth-1">
-            <input id="search-bar" class="z-depth-5" type="text">
+            <input id="search-bar" class="z-depth-5" type="text" autocomplete="off">
             <button type="submit" name="button"><i class="large material-icons">search</i></button>
         </form>
     </div>
@@ -142,7 +268,12 @@
                     <a class="waves-effect waves-light black btn" onclick="nextVideo()"><i class="material-icons">skip_next</i></a>
 
                     <br>
-                    <br>
+
+                    <div class="controll-buttons">
+                        <i id="repeat" class="material-icons">autorenew</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <i id="shuffle" class="material-icons">shuffle</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <i class="material-icons" onclick="emptyPlaylistAndCookie();">delete</i>
+                    </div>
 
                     <div id="box">
                     </div>
@@ -152,13 +283,8 @@
         </div>
 
         <div class="col s9">
-            <div class="">
-                <input type="checkbox" id="shuffle"><label for="shuffle">셔플</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <input type="checkbox" id="repeat"><label for="repeat">현재곡반복</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <a href="" onclick="emptyPlaylistAndCookie();">비우기</a>
-            </div>
 
-            <br><br>
+            <br><br><br><br>
 
             <div class="container">
                 <div class="video-container">
@@ -226,64 +352,56 @@
                 searchResultBoxSetSize();
             });
             onClickFeedbackSubmit($('#feedback-submit'));
+            $(document).on('click', (e) => {
+                let classes = $(e.target).parentsUntil('html');
+                let resultBoxClicked = false;
+                for(let i in classes) {
+                    if(classes[i].className == 'search-result-box z-depth-1') {
+                        resultBoxClicked = true;
+                    }
+                }
+                if(resultBoxClicked == false) {
+                    $('.search-result-box').remove();
+                }
+            });
+
+            $('#shuffle').on('click', () => {
+                let color = $('#shuffle').css('color');
+                console.log(color);
+                if(color == 'rgb(174, 174, 174)') {
+                    $('#shuffle').css('color', 'black');
+                }
+                else {
+                    $('#shuffle').css('color', '#aeaeae');
+                }
+            });
+
+            $('#repeat').on('click', () => {
+                let color = $('#repeat').css('color');
+                if(color == 'rgb(174, 174, 174)') {
+                    $('#repeat').css('color', 'black');
+                }
+                else {
+                    $('#repeat').css('color', '#aeaeae');
+                }
+            });
         });
 
         function onSubmitSearchBar() {
             $('#search-form').on('submit', (e) => {
-                console.log('test');
                 e.preventDefault();
+                cnt = 0;
+                videoId = [];
                 appendSearchResultBox();
+                appendLoading($('.search-result-box'));
                 getVideoIdsByQuery($('#search-bar').val(), getVideoDataByIds);
             });
-        }
-
-        function foo(data) {
-            console.log(data);
         }
 
         function appendSearchResultBox() {
             $('body').append(`
                 <div class="search-result-box z-depth-1">
-                    <div class="video card-panel">
-                        <div class="thumbnail">
 
-                        </div>
-                        <div class="info-field">
-                            <div class="title">
-                                <span>정은지&서인국 - 우리 사랑 이대로 (응답하라 1997 Official OST Love Story Part 2)</span>
-                            </div>
-                            <div class="sub-info">
-                                원더케이(1THEK) ㆍ 1 : 23 : 5
-                            </div>
-                        </div>
-                        <div class="button-field">
-                            <i class="basket material-icons" id="basket">add</i>
-                            <i class="play material-icons" id="play">play_arrow</i>
-                        </div>
-                    </div>
-
-                    <div class="video card-panel">
-                        <div class="thumbnail">
-
-                        </div>
-                        <div class="info-field">
-                            <div class="title">
-                                <span>정은지&서인국 - 우리 사랑 이대로</span>
-                            </div>
-                            <div class="sub-info">
-                                원더케이(1THEK) ㆍ 1 : 23 : 5
-                            </div>
-                        </div>
-                        <div class="button-field">
-                            <i class="basket material-icons" id="basket">add</i>
-                            <i class="play material-icons" id="play">play_arrow</i>
-                        </div>
-                    </div>
-
-
-                    <div class="video card-panel">
-
-                    </div>
                 </div>
 
             `);
@@ -355,7 +473,7 @@
                             <i class="material-icons" id="close${videoCnt}" style="cursor: pointer; margin-left: -20px; margin-top: -23px;">clear</i>
                         </div>
                         <div id="song-title">
-                            <span id="list${videoCnt}" style="cursor: pointer;">${video.snippet.title}</span>
+                            <span class="song-title-text" id="list${videoCnt}" style="cursor: pointer;">${video.snippet.title}</span>
                         </div>
                     </div>
                 `);
@@ -367,7 +485,7 @@
                             <i class="material-icons" id="close${number}" style="cursor: pointer; margin-left: -20px; margin-top: -23px;">clear</i>
                         </div>
                         <div id="song-title">
-                            <span id="list${number}" style="cursor: pointer;">${video.snippet.title}</span>
+                            <span class="song-title-text" id="list${number}" style="cursor: pointer;">${video.snippet.title}</span>
                         </div>
                     </div>
                 `);
@@ -381,7 +499,8 @@
             var hour = getTimeForVideo(duration)[0];
             var min = getTimeForVideo(duration)[1];
             var sec = getTimeForVideo(duration)[2];
-            appendVideoCard($('#slide-out'), video, hour, min, sec);
+            // appendVideoCard($('#slide-out'), video, hour, min, sec);
+            appendVideoCard($('.search-result-box'), video, hour, min, sec);
             onClickBasketButton($(`#basket${cnt}`), video);
             onClickPlayButton($(`#play${cnt}`), video);
             cnt++;
@@ -428,11 +547,11 @@
                 async: false,
                 success: (videos) => {
                     for(var i in videos.items) {
-                        foo(videos.items[i]);
-                        // if(option == 1) appendVideoToSearchBox(videos.items[i]);
-                        // else if(option == 2) appendVideoToList(videos.items[i], i);
-                        // else console.log('error');
-                        // saveVideoId(videos.items[i].id);
+                        // foo(videos.items[i]);
+                        if(option == 1) appendVideoToSearchBox(videos.items[i]);
+                        else if(option == 2) appendVideoToList(videos.items[i], i);
+                        else console.log('error');
+                        saveVideoId(videos.items[i].id);
                     }
                     finishLoading();
                 }
@@ -447,30 +566,49 @@
         }
 
         function appendVideoCard(element, video, h, m, s) {
+            // element.append(`
+            //     <li class="video-list card-panel">
+            //         <div id="">
+            //             <div id="list">
+            //                 <div id="thumbnail">
+            //                     <img src="${video.snippet.thumbnails.default.url}" />
+            //                 </div>
+            //                 <div id="info" style="margin-left: 10px;">
+            //                     <div id="title" class="title${cnt}">
+            //                         ${video.snippet.title}
+            //                     </div>
+            //                     <div id="publisher" class="publisher${cnt}">
+            //                         재생시간 : ${h}:${m}:${s} / 게시자 : ${video.snippet.channelTitle}
+            //                     </div>
+            //                 </div>
+            //                 <div id="take-music">
+            //                     <i class="basket material-icons" id="basket${cnt}" style="margin-left: 30px; margin-top: 35px; cursor: pointer;" onclick="Materialize.toast('Added!', 1000)">add</i>
+            //                 </div>
+            //                 <div id="play-now">
+            //                     <i class="play material-icons" id="play${cnt}" style="margin-left: 30px; margin-top: 35px; cursor: pointer">play_arrow</i>
+            //                 </div>
+            //             </div>
+            //         </div>
+            //     </li>
+            // `);
             element.append(`
-                <li class="video-list card-panel">
-                    <div id="">
-                        <div id="list">
-                            <div id="thumbnail">
-                                <img src="${video.snippet.thumbnails.default.url}" />
-                            </div>
-                            <div id="info" style="margin-left: 10px;">
-                                <div id="title" class="title${cnt}">
-                                    ${video.snippet.title}
-                                </div>
-                                <div id="publisher" class="publisher${cnt}">
-                                    재생시간 : ${h}:${m}:${s} / 게시자 : ${video.snippet.channelTitle}
-                                </div>
-                            </div>
-                            <div id="take-music">
-                                <i class="basket material-icons" id="basket${cnt}" style="margin-left: 30px; margin-top: 35px; cursor: pointer;" onclick="Materialize.toast('Added!', 1000)">add</i>
-                            </div>
-                            <div id="play-now">
-                                <i class="play material-icons" id="play${cnt}" style="margin-left: 30px; margin-top: 35px; cursor: pointer">play_arrow</i>
-                            </div>
+                <div class="video card-panel">
+                    <div class="thumbnail">
+                        <img src="${video.snippet.thumbnails.default.url}" />
+                    </div>
+                    <div class="info-field">
+                        <div class="title title${cnt}">
+                            <span>${video.snippet.title}</span>
+                        </div>
+                        <div class="sub-info">
+                            ${video.snippet.channelTitle}ㆍ${h}:${m}:${s}
                         </div>
                     </div>
-                </li>
+                    <div class="button-field">
+                        <i id="basket${cnt}" class="basket material-icons" id="basket">add</i>
+                        <i id="play${cnt}" class="play material-icons" id="play">play_arrow</i>
+                    </div>
+                </div>
             `);
         }
 
@@ -544,10 +682,10 @@
 
         function nextVideo() {
             if (videoCnt) {
-                if(document.getElementById('repeat').checked) {
+                if($('#repeat').css('color') == 'rgb(0, 0, 0)') {
                     player.loadVideoById(playList[nowVideo]);
                 }
-                else if(document.getElementById('shuffle').checked){
+                else if($('#shuffle').css('color') == 'rgb(0, 0, 0)'){
                     var randomInt = Math.floor( (Math.random() * (videoCnt - 1 - 0 + 1)) + 0 );
                     restoreColor(nowVideo);
                     player.loadVideoById(playList[randomInt]);
@@ -569,11 +707,23 @@
 
         function prevVideo() {
             if (videoCnt) {
-                restoreColor(nowVideo);
-                if (!nowVideo) nowVideo = videoCnt - 1;
-                else nowVideo--;
-                player.loadVideoById(playList[nowVideo]);
-                changeColor(nowVideo);
+                if($('#repeat').css('color') == 'rgb(0, 0, 0)') {
+                    player.loadVideoById(playList[nowVideo]);
+                }
+                else if($('#shuffle').css('color') == 'rgb(0, 0, 0)'){
+                    var randomInt = Math.floor( (Math.random() * (videoCnt - 1 - 0 + 1)) + 0 );
+                    restoreColor(nowVideo);
+                    player.loadVideoById(playList[randomInt]);
+                    nowVideo = randomInt;
+                    changeColor(nowVideo);
+                }
+                else {
+                    restoreColor(nowVideo);
+                    if (!nowVideo) nowVideo = videoCnt - 1;
+                    else nowVideo--;
+                    player.loadVideoById(playList[nowVideo]);
+                    changeColor(nowVideo);
+                }
             }
         }
 
@@ -582,7 +732,7 @@
         }
 
         function restoreColor(now) {
-            $(`#list${now}`).css('color', 'aeaeae');
+            $(`#list${now}`).css('color', '#aeaeae');
         }
 
         function setCookie(cName, cValue, cDay){
@@ -615,10 +765,9 @@
 
         function appendLoading(element) {
             element.append(`
-                <li id="preloader" class="center">
-                    <br>
+                <div id="preloader" class="center">
                     <div class="preloader-wrapper big active">
-                        <div class="spinner-layer spinner-blue-only">
+                        <div class="spinner-layer spinner-red-only">
                             <div class="circle-clipper left">
                                 <div class="circle"></div>
                             </div>
@@ -630,7 +779,7 @@
                             </div>
                         </div>
                     </div>
-                </li>
+                </div>
             `);
         }
 
