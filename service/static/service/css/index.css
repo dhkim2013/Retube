@@ -13,6 +13,7 @@ body {
     body .nav .logo-field {
       height: 100%;
       margin-left: 50px;
+      margin-top: 10px;
       display: flex;
       justify-content: center;
       align-items: center; }
