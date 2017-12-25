@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Retube</title>
+        <link rel="stylesheet" href="/static/accounts/css/login.css" type="text/css">
+        <script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
+    </head>
+    <body>
+        <div class="content">
+            <a href="/"><img src="/static/service/images/logo.png" alt="logo" width="250px" height="50px;"></a>
+            <div class="login-box">
+                <form class="form" method="post">
+                    <div class="input-field">
+                        <input id="username" type="text" placeholder="ID">
+                        <input id="password" type="password" placeholder="Password">
+                    </div>
+                    <div class="button-field">
+                        <button class="sign-in" type="submit">Sign in</button>
+                        <a href="/accounts/register"><button class="sign-up" type="button">Sign up</button></a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            $(document).ready(() => {
+                $('.form').on('submit', (e) => {
+                    e.preventDefault();
+                    var settings = {
+                        "async": true,
+                        "crossDomain": true,
+                        "url": "/accounts/login/",
+                        "method": "POST",
+                        "headers": {
+                            "content-type": "application/x-www-form-urlencoded",
+                            "cache-control": "no-cache"
+                        },
+                        "data": {
+                            "username": $('#username').val(),
+                            "password": $('#password').val()
+                        }
+                    }
+
+                    $.ajax(settings).done(function (response) {
+                        console.log(response);
+                        if(response.success == "true") {
+                            document.location.href = '/';
+                        }
+                    });
+                });
+            });
+        </script>
+    </body>
+</html>

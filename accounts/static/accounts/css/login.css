@@ -1,0 +1,70 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0; }
+
+.content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; }
+  .content .login-box {
+    background-color: white;
+    border-radius: 5px;
+    width: 400px;
+    height: 450px; }
+    .content .login-box .form {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center; }
+      .content .login-box .form .input-field {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center; }
+        .content .login-box .form .input-field input {
+          border: none;
+          border-radius: 5px;
+          width: 280px;
+          height: 50px;
+          margin-top: 8px;
+          background-color: #f2f2f2;
+          color: #bebebe;
+          font-size: 24px;
+          font-weight: 700;
+          padding-left: 20px; }
+        .content .login-box .form .input-field input::placeholder {
+          color: #bebebe; }
+      .content .login-box .form .button-field {
+        margin-top: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center; }
+        .content .login-box .form .button-field button {
+          border: none;
+          border-radius: 5px;
+          width: 300px;
+          height: 50px;
+          margin-top: 8px;
+          cursor: pointer; }
+        .content .login-box .form .button-field .sign-in {
+          background-color: #4d4d4d;
+          color: white;
+          font-size: 24px;
+          font-weight: 700; }
+        .content .login-box .form .button-field .sign-up {
+          background-color: #ef8683;
+          color: white;
+          font-size: 24px;
+          font-weight: 700; }
+          .content .login-box .form .button-field .sign-up a {
+            text-decoration: none;
+            color: white; }
+
+/*# sourceMappingURL=login.css.map */
