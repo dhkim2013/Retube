@@ -159,6 +159,27 @@ body {
 
 }
 
+.container {
+    .controller {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .playlist-button {
+        width: 162.5px;
+        margin-bottom: 10px;
+        background-color: rgb(77, 77, 77);
+    }
+
+    .add-playlist {
+        width: 162.5px;
+        margin-bottom: 10px;
+        background-color: rgb(239, 134, 131);
+    }
+}
+
 .controll-buttons {
     display: flex;
     justify-content: center;
@@ -171,6 +192,10 @@ body {
     }
 }
 
+.dropdown-content li>a, .dropdown-content li>span {
+    color: rgb(77, 77, 77);
+}
+
 #preloader {
     margin-top: 200px;
 }
@@ -181,4 +206,10 @@ body {
 
 #repeat {
     color: #aeaeae;
+}
+
+.playlist-change {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

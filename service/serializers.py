@@ -10,8 +10,8 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ('id', 'username', 'first_name')
 
 class PlaylistSerializer(serializers.ModelSerializer):
-    owner = UserSerializer(read_only=True, default=serializers.CurrentUserDefault)
+    owner = UserSerializer(read_only=True, default=serializers.CurrentUserDefault())
 
     class Meta:
         model = Playlist
-        fields = ('id', 'name', 'videos')
+        fields = ('id', 'owner', 'name', 'videos')

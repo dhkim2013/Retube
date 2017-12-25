@@ -252,16 +252,19 @@
         <div class="col s3" id="side">
             <div class="center">
                 <div class="container">
+                    <div class="controller">
+                        <a class="waves-effect waves-light btn modal-trigger add-playlist" href="#modal2">재생목록 추가</a>
+                        <a id="dropdown" class='dropdown-button btn playlist-button' href='#' data-activates='dropdown1'>재생목록</a>
+                        <div class="flow-controller">
+                            <a class="waves-effect waves-light black btn" onclick="prevVideo()"><i class="material-icons">skip_previous</i></a>
+                            <a class="waves-effect waves-light black btn" onclick="nextVideo()"><i class="material-icons">skip_next</i></a>
+                        </div>
+                    </div>
 
-                    <a class="waves-effect waves-light black btn" onclick="prevVideo()"><i class="material-icons">skip_previous</i></a>
-                    <a class="waves-effect waves-light black btn" onclick="nextVideo()"><i class="material-icons">skip_next</i></a>
-
-                    <br>
-
-                    <div class="controll-buttons">
+                    <div class="controll-buttons" style="display: flex; justify-content: center;">
                         <i id="repeat" class="material-icons">autorenew</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <i id="shuffle" class="material-icons">shuffle</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <i class="material-icons" onclick="emptyPlaylistAndCookie();">delete</i>
+                        <i id="shuffle" class="material-icons">shuffle</i>
+                        <!-- <i class="material-icons" onclick="emptyPlaylist();">delete</i> -->
                     </div>
 
                     <div id="box">
@@ -315,32 +318,59 @@
         </div>
     </div>
 
+    <!-- Dropdown Structure -->
+    <ul id='dropdown1' class='dropdown-content'>
+        <li><a href="#!">pop</a></li>
+    </ul>
+
+    <!-- Modal Structure -->
+    <div id="modal2" class="modal">
+        <div class="modal-content">
+            <h4>재생목록 추가</h4>
+            <input type="text" id="playlist-name" placeholder="재생목록 이름을 입력해주세요">
+        </div>
+        <div class="modal-footer">
+            <a id="add-playlist" href="#!" class="modal-action modal-close waves-effect btn-flat">추가</a>
+        </div>
+    </div>
+
     <script>
         var playList = videoId = [];
         var videoCnt = nowVideo = cnt = 0;
         var player;
         var isFirst = true;
-
-        jQuery(window).load(function () {
-            cookieToPlayList();
-        });
+        var token = localStorage.getItem('basic');
+        var selectedPlaylistID = '';
 
         $(document).ready(() => {
             initYoutubeAPI();
             onSubmitSearchBar();
+            getPlaylist();
+
+            $('#add-playlist').on('click', () => {
+                let playlistName = $('#playlist-name').val();
+                $('#playlist-name').val('');
+                createPlaylist(playlistName);
+            });
+
             $('#button-collapse').sideNav({
                     menuWidth: 800, // Default is 240
                 }
             );
+
             $("#search-video").submit((e) => {
                 e.preventDefault();
                 search($('#query').val());
             });
+
             $('.modal').modal();
+
             $(window).resize(() => {
                 searchResultBoxSetSize();
             });
+
             onClickFeedbackSubmit($('#feedback-submit'));
+
             $(document).on('click', (e) => {
                 let classes = $(e.target).parentsUntil('html');
                 let resultBoxClicked = false;
@@ -376,6 +406,150 @@
             });
         });
 
+        function createPlaylist(playlistName) {
+            var settings = {
+                "async": true,
+                "crossDomain": true,
+                "url": "/playlist/",
+                "method": "POST",
+                "headers": {
+                    "content-type": "application/x-www-form-urlencoded",
+                    "authorization": `Basic ${token}`,
+                    "cache-control": "no-cache"
+                },
+                "data": {
+                    "name": playlistName
+                }
+            }
+
+            $.ajax(settings).done(function (response) {
+                console.log(response);
+                getPlaylist();
+            });
+        }
+
+        function getPlaylist() {
+            var settings = {
+                "async": true,
+                "crossDomain": true,
+                "url": "/playlist/?owner__username={{ username }}",
+                "method": "GET",
+                "headers": {
+                    "content-type": "application/x-www-form-urlencoded",
+                    "authorization": `Basic ${token}`,
+                    "cache-control": "no-cache"
+                }
+            }
+
+            $.ajax(settings).done(function (response) {
+                console.log(response);
+                appendPlaylist(response);
+            });
+        }
+
+        function deletePlaylist(id) {
+            var settings = {
+                "async": true,
+                "crossDomain": true,
+                "url": `/playlist/${id}`,
+                "method": "DELETE",
+                "headers": {
+                    "content-type": "application/x-www-form-urlencoded",
+                    "authorization": `Basic ${token}`,
+                    "cache-control": "no-cache"
+                }
+            }
+
+            $.ajax(settings).done(function (response) {
+                console.log(response);
+                getPlaylist();
+            });
+        }
+
+        function appendPlaylist(data) {
+            $('#dropdown1').empty();
+            for(i in data) {
+                $('#dropdown1').append(`
+                    <li style="display: flex; justify-content: space-between; align-items: center;"><a href="#!" id="${data[i].id}-dropdown" class="playlist-change">${data[i].name}</a><img id="${data[i].id}-delete" class="delete-playlist" src="/static/service/images/close.png" width="10px" height="10px" style="margin-right: 10px;"></li>
+                `);
+            }
+            $('.playlist-change').on('click', (e) => {
+                id = splitID(e.target.id);
+                $('#dropdown').html($(`#${id}-dropdown`).html());
+                selectedPlaylistID = id;
+                getVideosFromServer();
+            });
+            $('.delete-playlist').on('click', (e) => {
+                id = splitID(e.target.id);
+                deletePlaylist(id);
+                $('#dropdown').html("재생목록");
+            });
+        }
+
+        function patchPlaylist() {
+            let data = playList.join('::::');
+            var settings = {
+                "async": true,
+                "crossDomain": true,
+                "url": `/playlist/${selectedPlaylistID}/`,
+                "method": "PATCH",
+                "headers": {
+                    "content-type": "application/x-www-form-urlencoded",
+                    "authorization": `Basic ${token}`,
+                    "cache-control": "no-cache"
+                },
+                "data": {
+                    "videos": data
+                }
+            }
+
+            $.ajax(settings).done(function (response) {
+                console.log(response);
+            });
+        }
+
+        function getVideosFromServer() {
+            var settings = {
+                "async": true,
+                "crossDomain": true,
+                "url": `/playlist/${selectedPlaylistID}`,
+                "method": "GET",
+                "headers": {
+                    "content-type": "application/x-www-form-urlencoded",
+                    "authorization": `Basic ${token}`,
+                    "cache-control": "no-cache"
+                }
+            }
+
+            $.ajax(settings).done(function (response) {
+                console.log(splitVideoID(response));
+                emptyPlaylist();
+                videoData = splitVideoID(response)
+                videoCnt = videoData.length;
+                playList = videoData;
+                if(playList.length > 0) {
+                    getVideoDataByIds(videoData.join(','), option=2)
+                    playerInit();
+                }
+            });
+        }
+
+        function splitVideoID(data) {
+            videos = data.videos.split('::::');
+
+            if(videos[0] == '') {
+                return [];
+            }
+            else {
+                return videos;
+            }
+        }
+
+        function splitID(text) {
+            id = text.split('-')[0];
+            return id;
+        }
+
         function onSubmitSearchBar() {
             $('#search-form').on('submit', (e) => {
                 e.preventDefault();
@@ -392,7 +566,6 @@
                 <div class="search-result-box z-depth-1">
 
                 </div>
-
             `);
             searchResultBoxSetSize();
         }
@@ -517,8 +690,8 @@
             }
             if(id < nowVideo) nowVideo--;
             if(videoCnt == 0) isFirst = true;
-            insertCookie();
             console.log(`removeSongAtList - playList: ${playList}`);
+            patchPlaylist();
         }
 
         function onClickCloseButton(close) {
@@ -536,7 +709,6 @@
                 async: false,
                 success: (videos) => {
                     for(var i in videos.items) {
-                        // foo(videos.items[i]);
                         if(option == 1) appendVideoToSearchBox(videos.items[i]);
                         else if(option == 2) appendVideoToList(videos.items[i], i);
                         else console.log('error');
@@ -551,35 +723,11 @@
             song.on('click', (e) => {
                 var index = e.target.id.split('list')[1];
                 playVideoByIndex(index);
+                console.log(playList);
             });
         }
 
         function appendVideoCard(element, video, h, m, s) {
-            // element.append(`
-            //     <li class="video-list card-panel">
-            //         <div id="">
-            //             <div id="list">
-            //                 <div id="thumbnail">
-            //                     <img src="${video.snippet.thumbnails.default.url}" />
-            //                 </div>
-            //                 <div id="info" style="margin-left: 10px;">
-            //                     <div id="title" class="title${cnt}">
-            //                         ${video.snippet.title}
-            //                     </div>
-            //                     <div id="publisher" class="publisher${cnt}">
-            //                         재생시간 : ${h}:${m}:${s} / 게시자 : ${video.snippet.channelTitle}
-            //                     </div>
-            //                 </div>
-            //                 <div id="take-music">
-            //                     <i class="basket material-icons" id="basket${cnt}" style="margin-left: 30px; margin-top: 35px; cursor: pointer;" onclick="Materialize.toast('Added!', 1000)">add</i>
-            //                 </div>
-            //                 <div id="play-now">
-            //                     <i class="play material-icons" id="play${cnt}" style="margin-left: 30px; margin-top: 35px; cursor: pointer">play_arrow</i>
-            //                 </div>
-            //             </div>
-            //         </div>
-            //     </li>
-            // `);
             element.append(`
                 <div class="video card-panel">
                     <div class="thumbnail">
@@ -663,9 +811,9 @@
 
         function addVideo(video) {
             playList.push(video);
+            patchPlaylist();
             videoCnt++;
             playerInit();
-            insertCookie();
             console.log(`addVideo - playList: ${playList}`);
         }
 
@@ -724,34 +872,6 @@
             $(`#list${now}`).css('color', '#aeaeae');
         }
 
-        function setCookie(cName, cValue, cDay){
-            var expire = new Date();
-            expire.setDate(expire.getDate() + cDay);
-            cookies = cName + '=' + escape(cValue) + '; path=/ '; // 한글 깨짐을 막기위해 escape(cValue)를 합니다.
-            if(typeof cDay != 'undefined') cookies += ';expires=' + expire.toGMTString() + ';';
-            document.cookie = cookies;
-        }
-
-        function getCookie(cName) {
-            cName = cName + '=';
-            var cookieData = document.cookie;
-            var start = cookieData.indexOf(cName);
-            var cValue = [];
-            if(start != -1){
-                start += cName.length;
-                var end = cookieData.indexOf(';', start);
-                if(end == -1)end = cookieData.length;
-                cValue = cookieData.substring(start, end);
-            }
-            return unescape(cValue);
-        }
-
-        function insertCookie() {
-            data = ''
-            for(i = 0; i < playList.length; i++) data = data + playList[i] + ' '
-            setCookie('list', data, 365);
-        }
-
         function appendLoading(element) {
             element.append(`
                 <div id="preloader" class="center">
@@ -776,25 +896,6 @@
             $('#preloader').remove();
         }
 
-        function cookieToPlayList() {
-            var data = getCookie('list').split(' ');
-            var id = '';
-            playList = [];
-            nowVideo = 0;
-            videoCnt = data.length - 1;
-            if(data != '') {
-                for(var i = 0; i < videoCnt; i++) {
-                    if(i != 0) id = id + ',';
-                    playList.push(data[i]);
-                    id = id + data[i];
-                }
-                console.log(`cookieToPlayList - id: ${id}`);
-                getVideoDataByIds(id, 2);
-                playerInit();
-            }
-
-        }
-
         function playerInit() {
             if (isFirst) {
                 player = new YT.Player('p', {
@@ -809,19 +910,18 @@
             }
         }
 
-        function emptyPlaylistAndCookie() {
+        function emptyPlaylist() {
             playList = [];
             videoCnt = 0;
             cnt = 0;
             nowVideo = 0;
             isFirst = true;
 
-            insertCookie();
-
             $('.video-container').empty();
             $('.video-container').append('<div id="p"></div>');
 
             $('#box').empty();
+            patchPlaylist();
         }
 
         function focusToSearchBox() {

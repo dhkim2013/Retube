@@ -45,6 +45,8 @@
                     $.ajax(settings).done(function (response) {
                         console.log(response);
                         if(response.success == "true") {
+                            localStorage.setItem('basic', btoa($('#username').val() + ':' + $('#password').val()));
+                            localStorage.getItem('basic');
                             document.location.href = '/';
                         }
                     });

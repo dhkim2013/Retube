@@ -111,6 +111,20 @@ body {
         body .search-result-box .video .button-field i {
           cursor: pointer; }
 
+.container .controller {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; }
+.container .playlist-button {
+  width: 162.5px;
+  margin-bottom: 10px;
+  background-color: #4d4d4d; }
+.container .add-playlist {
+  width: 162.5px;
+  margin-bottom: 10px;
+  background-color: #ef8683; }
+
 .controll-buttons {
   display: flex;
   justify-content: center;
@@ -120,6 +134,9 @@ body {
   .controll-buttons i {
     cursor: pointer; }
 
+.dropdown-content li > a, .dropdown-content li > span {
+  color: #4d4d4d; }
+
 #preloader {
   margin-top: 200px; }
 
@@ -128,5 +145,10 @@ body {
 
 #repeat {
   color: #aeaeae; }
+
+.playlist-change {
+  display: flex;
+  justify-content: center;
+  align-items: center; }
 
 /*# sourceMappingURL=index_for_user.css.map */
